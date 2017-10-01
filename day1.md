@@ -3,6 +3,13 @@
 ## Meet Apache NetBeans [CON6160]
 
 ## Breaking up the Monolith with Jigsaw: An Architect’s View [CON4400]
+- https://github.com/apache/incubator-netbeans
+- Sven Reimers
+- Martin Klahn
+- Introduction to Jigsaw
+ - The idea is "Reliable configuration", "Strong encapsulation"
+- Why modularity Matters
+- Live coding with Apache netBeans 9 and Jigsaw
 
 ## Event Sourcing with JVM Languages [CON5074]
 
