@@ -11,6 +11,11 @@
   - The idea is "Reliable configuration", "Strong encapsulation"
     - Modular Descriptor(`exports`, `opens`, `requires`, etc...)
       - requires static?
+        - it's compile-time dependencies, dependencies checking will pass at runtime even if the library is not provided
+       - Difference between ordinary library managimant system(like Maven, Gradle, etc)?
+         - Jigsaw will check consistent of dependencies at compile-time
+       - What's happen if there is multiple implementation for service
+         - Java will resolve all of implementations
 - Why modularity Matters
 - Live coding with Apache netBeans 9 and Jigsaw
 
