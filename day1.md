@@ -4,10 +4,13 @@
 
 ## Breaking up the Monolith with Jigsaw: An Architect’s View [CON4400]
 - https://github.com/apache/incubator-netbeans
+- https://netbeans.apache.org/
 - Sven Reimers
 - Martin Klahn
 - Introduction to Jigsaw
- - The idea is "Reliable configuration", "Strong encapsulation"
+  - The idea is "Reliable configuration", "Strong encapsulation"
+    - Modular Descriptor(`exports`, `opens`, `requires`, etc...)
+      - requires static?
 - Why modularity Matters
 - Live coding with Apache netBeans 9 and Jigsaw
 
