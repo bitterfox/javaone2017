@@ -16,6 +16,7 @@
          - Jigsaw will check consistent of dependencies at compile-time
        - What's happen if there is multiple implementation for service
          - Java will resolve all of implementations
+       - Versioning is not supported at this moment
 - Why modularity Matters
 - Live coding with Apache netBeans 9 and Jigsaw
 
