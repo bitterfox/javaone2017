@@ -19,8 +19,8 @@
     - Java will resolve all of implementations
   - Versioning is not supported at this moment
 - Why modularity Matters
-  - Software will be big, large.
-		- Software sould be split into multiple module and constructed from these module.
+  - Software will be big, large
+    - Software sould be split into multiple module and constructed from these module.
     - Encapsulation, Complexity
 - Live coding with Apache netBeans 9 and Jigsaw
    - NetBeans don't complete any class which is not `required` even if it's in same project.
@@ -68,7 +68,58 @@
 
 
 ## Feeding Nine Million Java Developers: How and What? [CON6088]
+- Java Community is pretty big!
+  - 314 JUGs
+  - 12M+ Developers
+  - 200+ Java Champions
+  - 50+ JUG groups contributing to JCP
+  - Activities
+    - User Group summit
+    - Kids Workshop
+    - Ignite session
+    - Adopt a JSR
+    - Hackerguardan
+    - Adopt OpenJDK http://adoptopenjdk.net
+    - Interviews around the world(In JavaDayTokyo and so on)
+    - Developer Lounge Demo
+    - Geek Bike Ride
+- Keep in Touch with Your "Friends"
+  - @java on twitter
+    - Contents is important
+      - So she looking for new contents always
+    - Aims RT
+      - Tweet with image, video can get more RT
+    - Quizs
+    - Using tools like IFTTT, Deck, feedly
+  - Facebook(India and Brazil)
+- Join Java Champions
+  1. Leadership - Start a JUG
+  - Thechnical Lumaniray
+  - Talk at a confurence
+  - Joining JCP
+  - Idenpendent
+    - Do grate things for Java
+  - Educational
+    - Java4Kids
+  - Ask a Java Champion to nominate you
+- Japan Java Tour
 
 ## Adopt Programs: How to Participate in the Future of Java [CON7623]
+- Adopt OpenJDK
+  - https://community.oracle.com/docs/DOC-991498
+- https://wiki.openjdk.java.net/display/Adoption/Main
+- Adopt OpenJDK http://adoptopenjdk.net
+  - Providing OpenJDK binaries
+- https://github.com/AdoptOpenJDK
+- OpenJDK/Mobile Project
+  - Porting OpenJDK to mobile platform, not fork
 
 ## Development Horror Stories [CON3977]
+(開発の失敗談的なものを雑に会場内から話すスタイルなので雑に)
+- シェルスクリプトにTypoでスペースが入ってUbuntuのユーザディレクトリが全部削除された話
+- US ミリタリのinventolyが入ったデータベースが消えちゃった話
+- 講演に設置している何故かセンサーが毎日夕方に接続が切れるバグが発生
+  - 整備の人がコンセントを引き抜いて自分の機材を接続していた
+- メールサービスで，メールを受け付けた旨のメールを送るシステムがあった
+  - システム同士がメールを送り合ってメールサーバがクラッシュしちゃった話
+- Etc...
