@@ -204,8 +204,43 @@
       - Benefit in big data like Cassandora HBase which uses array as a key
     - New FMA API
 
-
 ## Java Keynote [KEY7692]
+- Core Foundattion
+  - Communication
+  - Community
+  - Collaboration
+  - Contributions
+  - Female JUG
+- Optimization from Intel
+  - Data is increacing
+  - Speed
+    - 73 times faster in 10 years
+      - in this year, its 110x faster
+  - Scale
+    - 3D NAND
+      - lower cost, more capacity
+    - Persistent Memory
+      - Remove file-system, driver, no overhead
+    - Persistent Collections for Java
+      - https://github.com/pmem/pcj
+    - Allibaba
+      - 1 million JVM in DC
+      - They have their cusomized JDK
+      - There is 175,000 transaction / sec
+    - Representative workload
+      - Databench
+        - https://github.com/Data-Bench
+  - Smart(AI, Smart decision)
+    - BigDL
+    - AVX512 acceleration for AI on Java
+    - Vectorization
+      - Panama with Demo
+      - Vector API Developer program
+- Java EE goes to Eclipse
+  - Now it runs on Java 8 and nimble evolution
+
+
+
 
 ## RDBMS to Kafka: Stories from the Message Bus Stop [CON7374]
 
