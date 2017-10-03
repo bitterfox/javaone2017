@@ -325,9 +325,14 @@
 - Migrate everything(re-modularize application using modularized jar)
   - just adding --module-path to compiler!
 
-
-
 ## OpenJ9: Under the Hood of the Next Open Source JVM [CON3573]
+- Eclipse OpenJ9
+  - dual license to have compatible to OpenJDK
+    - Eclipse Public cLicense
+    - Apache License
+  - binary is hosted on Adopt-OpenJDK
+    - TODO URL
+
 
 ## Developer Keynote [KEY7383]
 
