@@ -238,14 +238,152 @@
       - Vector API Developer program
 - Java EE goes to Eclipse
   - Now it runs on Java 8 and nimble evolution
-
-
-
+- Java SE
+  - 9 is released
+  - 6 montly release
+- Spotify moving to Java from Python
+- Kubernetes + Java
+- Wercker + Java
+  - Demo: Diagnosis memory leak of Java app using Wercker
+- FnProject
+  - Serverless
+  - Java FDK?
+  - https://github.com/fnproject/fn
+- Java SE
+  - 9 is out
+    - which means Jigsaw is also out
+    - Jigsaw
+      - -classpath
+      - Monolithic JDK
+      - module = set of packaged designed for re-use
+      - --module-path
+    - Docker + Jigsaw + jlink Demo
+    - Jigsaw don't break everything
+      - but something ;)
+      - If your code depend on only standard API, it mostly works fine
+      - cannot compile, but run with warn
+        - In future it doesn't run
+        - Use `jdeps` to analyze dependencies
+    - jshell
+    - Collection factories
+    - Javadoc search box
+    - Module graph in Javadoc
+    - Enhancement `@Deprecated`
+    - Integeration with IDE(IntelliJ, Eclipse is already integrated, NetBeans will be soon)
+      - Jigsaw Integeration
+      - Code conversion from old collection factories to modern collection factories
+  - Future
+    - 6 monthly release to increase speed of evolution
+    - LTS supports for 3 years
+    - Project Panama
+    - Project Valhalla
+    - Project Amber
+      - Right sizing language ceremony
+      - Type inference of variable
+        - Production release in next march
+      - Pattern match
+    - Project Loom
 
 ## RDBMS to Kafka: Stories from the Message Bus Stop [CON7374]
+- What is Kafka
+  - Kafka controls offset of Consumer group and producer
+    - Even if a consumer crashed and reloaded, it can see same data again because it's event and kafka controls offset
+      - It cannot in DB because it's state
+  - High and Low level Java API
+  - Kafka connect
+  - Kafka REST Proxy
+  - Third-party tools
+- State and Events
+  - database give you state
+    - DB(REDO) Log is a event
+  - Kafka give you event
+- Usecase
+  - Migrating legacy system
+    - Put data in legacy system to kafka, and consume it to modern system
+  - Replication
+- https://github.com/confluentinc/schema-registry
+- Live Demo
+  - produce data in mysql, oracle DB using kafka connect
+    - Delete is not produced to kafka as default
+      - Using flashback query in oracle db, it can be
+    - kafka-connect-jdbc has issues
+      - oracle number to javaint
+      - schema changes
+      - UTC timezone issues
+  - replicate using dbvisit
+- Oracle goldengate integrated producer
+  - redo -> ogg extract to trail failes -> ogg-bd for replicate to kafka -> kafka
 
 ## Shenandoah 2.0: Now That We’ve Gotten the GC Pause Times Under Control, What’s Next? [CON6108]
+- To be filled
 
 ## Using Type Annotations to Improve Your Code [BOF3048]
+- Type annotation is introduced in Java 8
+  - it stored in classfile
+  - Hnadled by javac, javap, javadoc
+  - But it has no effect unless you run an annotation processor
+  - Write annotation before type
+    - For `String [][]`, a readonly array of nonempty array of english string will be `@English String @Readonly [] @NonEmpty[] a`
+    - For reciever of method, we can consider all of instance method takes reciever also.
+      - `equals(Object other)` takes two parameter, reciever(`this`) and `other`
+      - `equals(MyClass this, Object other)`, `equals(@ReadOnly MyClass this, @ReadOnly Object other)`,
+    - For constructor return, every constructor has a return type
+      - `@TReturn MyClass() {}`
+  - Why annotation?
+    - Annotations are a specification
+- Pluggable Type Systems
+  - CheckerFramework
+  - mostly same as a session in this morning
+  - Type inference in method
+    - called Flow-sensitive refinement
+  - Whole program inference(as beta)
+- Type Annotations in Java 9 and Future
+  - Java 9
+    - implementation improvements
+  - Java >9
+    - What annotation-related feature are you missing?
+      - Statement annotations
+      - More expressive annotation attributes
+      - Annotation inheritance
 
 ## JSF 2.3 in Action [BOF2723]
+- Author of JavaServerFaces in Action
+- History of JSF 2.3
+  - Started in Sep 2014
+  - Completed in Apr 2017
+  - Heavily community-driven
+    - PrimeFaces folks
+- Themes
+  -Java EE alignment
+    - Full support for CDI
+    - Websocket
+    - Class-level bean validation
+  - Java 8 alighnment
+    - DateTime API, generics, etc
+    - a lot of small fixes
+- JSF 2.3 in Action
+  - `ui:repeat`, `<h:dataTable>` for map and iterable
+    ```
+      <ui:repeat value=#{data.map} var="item">
+        #{item.key}
+        #{item.value}
+      </ui:repeat>
+    ```
+  - `ManagedBean` is deprecated, use `Named`
+    -`javax.faces.beans.ManagedProperty` -> `javax.faces.annotation.ManagedProperty`
+  - `ui:repeat` with `step`
+  - `FacesConfig`
+  - `@Inject` on `FacesContext`, `RequestParameterMap`, `ViewMap` and so on
+  - `ProjectStage` and `isProjectStage`
+    - refer static field with `f:importConstants`
+  - Websocket
+    - Add `ENABLE_WEBSOCKET_ENDPOINT` in `web.xml`
+  - Offical support for dynamic omponent tree manipulation
+  - Retreiving a list of all view resources
+  - Standardized resource rendered tracking
+  - Generics for converter and Validator interface
+  - Facelets disables hot re-loading by default if ProjectStage == Production
+  - Auto conversion in UISelectMany for collection
+  - Freely placeable radio button
+  - Java 8 DateTime API at convertDateTime
+  - Updating multiple forms via AJAX
