@@ -137,9 +137,68 @@
         - `RawMemoryRegion` -> useful for volatile use or when caller provides data consistency
         - `Flushable MemoryRegion` -> includes flush and fail-safe is flushed state
         - `TransactionalMemoryRegion` -> write are transactional
+- QA
+  - Can we emulate the behaivior without persistent memory
+    - Yes. It will write to RAM disks?
 
 
 ## Adventures in Big Data Scaling Bottleneck Hunt [CON7682]
+- DataCenter workloads trends
+  - Data explosion continues
+  - Focus on putting data to work
+  - Distributed.scale out becoming the norm
+  - Emergin focus on machine/deep learning
+- Hardware to meet work load demands
+  - Increace CPU Core
+  - SSD & NVMe economics drive IO requirements higher
+  - Larger memory capacities for big data sets and in- memory DB
+  - Networking standards evolving faster 10G -> 25G -> 100G with RDMA
+  - Accelerator ASICs and FPGAs to otimize computationally expensive work
+- Dilemma
+  - Stay compatible vs. access new feature or performance
+  - incompatibilities like using Unsafe to reduce GC
+
+- Case study
+  - Checksum
+    - CRC32 implementation kicks JNI
+    - Frequently invoked method in Hadoop(~10% of total runtime)
+    - Hadoop community implemented a pure java version, PureJavaCRC32, 10x faster
+    - Built in Java Checksum
+      - Intel improved CRC32 in Java, 10x faster than PureJavaCRC32 in JDK8
+      - In JDK9 Intel introduces a CRC32c which is faster than the previous CRC32
+  - Lexicographic Array Compare
+    - Commonly used in key lookup or serch application like HBase
+    - HBase spend 20% of runtime to lexicographic Compare
+    - They have own unsafe version, comparing 8bytes as a single operation with 8x faster
+    - In JDK9 introduce a standard Lexicographi array comparator (vectorizedMismatch)
+    - Intel implements 64bytes as a single operation, 12x vs JDK, 2x over Hadoop one
+    - JDK-8033148
+- Apache Cassandra data insert performance
+  - Run it and mesure
+  - JFR Profile
+    - SlabAllocator.java
+      - bump-the-poiter
+      - combat heap fragmentation
+      - It hack to avoid GC
+      - But many of thread need to wait by lock
+    - Fix it
+      - Use G1GC
+      - Make it ThreadLocal
+  - Finding root cause is difficult
+- Genomics Scalability
+  - Disabling 2nd Super cache improved Cassandra writes by 60%
+  - Unreported JVM issue that affects scalability of many existing application
+- Puzzling IO Behavior
+  - kernel frequently flushing the file system cache
+    -
+  - Introducing Direct IO
+    - Self caching application have better semantics of the data than the OS
+    - Modern SQL Database often only use direct IO, but not Java
+    - Provides more consistent throughput and latencies
+    - Avoid double caching of data
+  - In JDK9+ to contain direct IO API
+  - Cassandra and HBase are improved 2x throughput and responce time improvement
+
 
 ## JDK 9 Language, Tooling, and Library Features [CON2702]
 
