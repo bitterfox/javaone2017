@@ -201,8 +201,131 @@
 
 
 ## JDK 9 Language, Tooling, and Library Features [CON2702]
+- Modularity
+  - module-info.java
+  - javac
+  - java command and HotSpot
+  - Reflection API
+- Stewardship
+  - JDK General Evolution Policy
+    - Don't break binary compatibility
+    - Avoid introducing source incompatibilities
+    - Manage behavioral compatiblity changes
+    - Ex)
+      - Security updates will breaks behavioral compatibility
+
+  - How is JDK 9 different
+    - Jigsaw, and a lot of large feature
+    -
+- Tooling
+  - jshell
+    - REPL
+    - No public class public static final void main...
+    - For student, experienced developper
+      - Exploring new API, language features
+  - Javadoc Next
+    - HTML5 Javadoc
+    - Configurint doclint
+    - Doclint and package filtering
+    - Simplified doclet API
+    - Javadoc search
+  - javac
+    - -release option
+      - Why bootclasspath needs to be set
+      - Should remove need to use tools like  Animal Sniffer
+    - Other fix
+      - Tiered Attribution
+  - multi release jar
+    - Ant, Maven, IntelliJ supports
+  - Cleaning up Project coin - milling project coin
+    - @SafeVarargs on private method
+      - To avoid heap pollution false positive
+      - @SafeVarargs can only be used on method that cannot be overriden
+        - final, stattic, constructor
+        - private is ommitted in JDK7
+    - variable on try-with-resources
+    - Diamond for anonymous class
+      - non-denotable types which cannot be represented as needed in the class file on anonymous class
+      - can remove 10% of usage
+    - Remove _ as a identifier
+      - Future possibilities
+        - Partial diamond
+        - partial withnesses
+        - etc...
+    - private interface methods
+    - We can deliver small language change as soon as possible due to 6 monthly release
+    - Fix deprecation on import
+      - java.base and java.desktop has no deprecation warning now!!
+    - `@Deprecated(since, forRemoval)`
+      - jdeprscan
+    - New version string scheme
+      - It will be changed again in 18.3 ;)
+  - Library
+    - String
+      - Compact string
+      - Indify String concat
+    - Security
+      - provide out of the box secure default
+      - New crypto hash SHA-3
+      - Better SecureRandom algorithm
+      - etc...
+    - JavaFX
+      - Modularized
+      - Hi-DPI on linux
+    - Client Libraries
+      - ...
+    - Misc
+      - Collection Factories
+      - new API on j.u.Objects
+      - etc...
 
 ## Migrating to Modules [CON6122]
+- Live coding session?
+- Mark shows a program using Jackson library
+  - Compile it with previous option, --classpath
+  - and run it
+- Migrate application to Jigsaw
+  - add module-info.java
+    ```
+    module org.tweetsum {
+      requires jackson.core ;
+      requires jackson.databind;
+      requires jackson.annotation;
+    }
+    ```
+    - Using automatic module, to use old jar
+      - `jackson-core` -> `jackson.core`
+    - Use jdeps to know which modules are used including automatic module
+  - Compile with jigsaw options
+    - module-path, etc
+  - package it and run it
+    - j.l.r.InaccessibleException occur!!
+      - org.tweetsum is not opened
+      - because jackson uses a class in org.tweetsum via reflection!
+      - This occur even if export org.tweetsum!
+        - exports means accept access via API, not reflection
+      - Use open to accept reflection access including non package elements?
+- Package it using jlink
+- --show-module-resolution option is useful to diagnosis
+
+- Migrate library to Jigsaw
+  - Use jdeps to know the dependencies of library
+    - --generate-module-info
+      - generate module-info.java but exports everything
+      - requires transitive
+      - including service(provides)
+  - Compile & Package it
+  - see jar file with --describe-module-info(?)
+  - Run classpath application with modularized jar
+    - java --module-path mlib -classpath lib/org-tweetsum.jar
+    - Error occur
+      - Unable to find class Main
+      - fix it using --add-modules jackson.core,jackson.databind.etc...
+        - ALL-MODULE=PATH
+- Migrate everything(re-modularize application using modularized jar)
+  - just adding --module-path to compiler!
+
+
 
 ## OpenJ9: Under the Hood of the Next Open Source JVM [CON3573]
 
