@@ -1,16 +1,327 @@
 # Day4
 ## Streams in JDK 8: The Good, the Bad, and the Ugly [CON4986]
+- Think it functional
+  - `hoge.forEach(a -> print, if () {count.getAndIncrement}`
+  - `hoge.mapToInt(a -> print, a ? 1 : 0).sum`
+  - `hoge.peek.mapToInt(a -> a ? 1 : 0).sum`
+  - `hoge.peek(print).filter(filterMehtod).count`
+    - Strictly speeking it's not purely functional because printing has a side effect
+- Internal and external iteration
+  - mix iteration(Bad)
+    - `for (int i; ...) { daysOfMonth[i] = data.stream()....filter( -> Month.of(i+1))}`
+      - i cannot be referred in lambda expression due to not effective final
+    - `for (int m; ..) {int i = m; ...}`
+  - Internal iteration
+    - `IntStream.range(0, 12). forEach(i -> dayofMonth[i] = data.stream().filter( -> Month.of(i+1)))`
+  - InternalIteration (good)
+    - `Math<Month, Map<...>> result = data.stream().map().collect(groupingBy(groupingBy(counting())))`
+- Hands on Lab question
+  - input: alpha, bravo, charlie
+    - `StringBuilder sb;input.forEach(s -> sb.append(s.charAt(0)))``
+    - `String result = input.stream().map(s.substring(0, 1)). reduce("", (a, b) -> a + b)`
+      - this is not good due to multiple string creation
+    - `StringBuilder sb; Optional<String> opt = input.stream.map(...).reduce((a, b) -> sb.append(b).toString)`
+      - FAIL!! bcdef, because "a" came at a
+    - `...reduce((a, b) -> if (a.length() == 1) {sb.append(a)}... )`
+    - `....collect(Collector.of(SB::new, SB::append, SB::append))`
+      - Thrid one is a combiner which is used when it's parallel
+    - `.collect(Collectors.joining())`
+- Reusing stream
+  - will be exception
+- Lambda or MethodReference?
+  - MethodReference is better performance
+- Multi sort
+  - .sort().sort().sort()
+    - not goot
+  - .sort(comparing().thenComparing.thenComparing)
+- ParallelStreams are Faster?
+  - Not guaranteed
+  - parallel stream do more work
+    - might finish quicker
+  - use common fork-join pool
+    - Default # = # of CPU
+- Nesting Parallel Stream
+  - parralel.map(parallel)
+    - will be slower than sequencial
+  - Use custom fork join pool(?)
+- when write sideeffect, consider side-effect
 
 ## JShell: An Interactive Shell for the Java Platform [CON3969]
+- What is JShell
+- What is not JShell
+- Who uses jshell
+- If not using jshell
+  - Using jshell(demo)
+    - List.of("").sort(String::compareTo)
+    - stream.sorted
+      - scratch variable, reusable
+    - $3.toArray()
+- jshell
+  - input
+    - Snippet
+      - Decl, Expression, stat
+      - Not package, static, final, break,continue, return at top-level
+    - command
+  - completion
+  - console control
+- Demo
+  - String half(String s) {return s.substring(s.length()/2);} with tab completaion
+  - Testing it and fix
+  - /list
+  - /reset
+  - forward reference with method
+    - fix forward reference by import static and define method
+  - boot jshell with classpath
+    - /env
+    - using own classes
+    - graphic demo
+- JShell arch and APIs
+- Metademo
+  - Using jshell api from jshell
+- useful links
 
 ## JShell: The Ultimate Missing Tool [CON1188]
+- REPL
+  - read, eval, print, loop
+- jshell
+  - code snippet
+  - /help
+  - var Decl
+  - /list
+  - /n, /!, /-n runs sunippet from history
+  - method declaration and type Decl
+    - /methods, /type
+  - /edit
+  - /drop
+  - multiline stat
+  - classpath and using library
+  - /set editor
+  - startup
+- http://tryjshell.org
 
 ## You Deserve Great Tools: Mockito 2 for Cleaner Tests and Enhanced Productivity [CON6158]
+- Mockito 2
+  - increase productivity
+    - no dead code in test
+    - easy to investivate test failure
+    - DRY verification
+  - Easy to investivate test failure
+    - Easy to find which is wrong or which is cause of issues
+      - Similar error message with JUnit, and IDE can recognize it message
+      - Just one click, be able to jump to the place
+  - strict mock
+    - mock(Hoge.class, invoke -> {throw new RE(invoke)})
+      - Override default behaivior of mock
+  - Using @Mock annotation to create mock
+    - print warinings as default if there are something wrong
+    - MockitoJUnit.rule().strictness(STRICT_STUBS)
+      - print exception which easy to fix issues if there are something wrong
+      - detect dead stubing code
+      - verify stubing method called
+        - No more duplicating verification `verify(wiki).hogehoge` before `verifyNoMoreInteraction`
+  - Others
+    - java8 supports
+    - mocking final
+    - etc
+  - Please contribute!!
+  - WID
+    - powermock, spring boot Integration
+    - more better strictness
+    - improve final mocking
+  - Change the production code to easy to test!
+  - sipped by Shipkit
+  - use template to write greate tests
+    - given, when, then
 
 ## Visual JShell: JShell on Steroids [CON6166]
+- What's wrong with java for teaching and prototyping
+  - see adnvance feature of language when you write HelloWorld
+    - class, method
+    - no public class main
+    - no public static void main
+    - no System.out
+    - Want just `println("HelloWorld")`
+- How to fix it
+  - simple language(subset)?
+  - quickly feedback?
+  - Strong story
+    - Why do you start programming
+    - statistics
+  - Old programming language has a simple language and quick feedback, like BASIC
+- Introduction to JShell
+  - No public class Main { ... }
+  - The result of expr is tored to temporary variable
+  - Swing works well!
+  - JavaFX is difficult but there is a integration library
+    - https://github.com/bitterfox/JavaFXSupportsForJShell
+- Visual programming language
+  - Sutherland's VPL
+  - LabView
+  - Scratch
+    - Domain specific
+- Visual Reflection - VRL
+  - Visualize IO of methods
+  - Visualize your code
+  - http://vrl-studio.mihosoft.eu/
+- Running VRL inside JShell
 
 ## Exploring Java 9 with REPL [CON3423]
+- API improvement
+  - Collection
+    - List.of, Set.of, Map.of
+    - Stream.takeWhile, dropWhile
+    - IntStream.iterate
+      - `IntStream.iterate(0, i -> i + 2)`, `IntStream.iterate(0, i -> i < 10, i -> i + 2)`
+    - Stream.ofNullable.count() -> 0
+      - Stream.of(null) throws NPE
+  - CompletableFuture
+    - completeOnTimeout
+      - Usecase: take value from Microservice, if it timedout use a default value or cached value
+    - orTimeout
+      - throws TimeoutException at get if not yet completed
+    - copy
+  - Throwable.getStackTrace was expensive operation when we want some of stack trace
+    - StackWalker.getInstance().walk
+  - Process
+    - Enable to get pid via Process
+      - ProcessHandle.current().pid(), info().commandLine()
+    - ProcessHandle.allProcesses
+    - Process.toHandle().onExit() returns CompletableFuture
+    - ProcessBuilder.startPipeline
+  - new HTTP/2 client
+    - incubator
+    - HttpHandler
+    - HttpServer
+      - create(new InetSocketAddress(8000), 0)
+      - createContext("/hello", handler)
+      - start()
+    - HttpClient
+    - HttpRequest
+      - HttpRequest.newBuilder(.url(url).GET().build())
+      - client.send(request, BodyHandler.asString())
+      - sendAsync -> CompletableFuture
+    - HttpResponse
+      - response.body()
 
 ## Full Speed Ahead! (Ahead-of-Time Compilation for Java SE) [CON3738]
+- JIT is faster than intepretor?
+  - case by case
+  - compilation overhead is high
+  - interpretation is better for non-hot method
+- HotSpot's JIT
+  - interpreted
+    - hotspot detected by samping profiler
+      - compiled
+    - not hotspot method
+      - still interpreted
+  - Week point
+    - Application start up time is longer
+  - C2 uses profile
+- AOT
+  - compile before execution
+    - improve startup time
+    - improve footprint
+      - In JIT, every JVM has their own machine code in their JVM
+      - But AOT can share machine code between JVM
+    - Less time to peek performance
+    - Less runtime compilation overhead including CPU and memory
+  - jaotc
+- Similar functionality to improve startup time and duration until get peek performance
+  - Tiered compilation
+    - Interpreter -> C1 w/ profiling -> C2
+  - Class Data Sharing
+    - ClassData, classes.jsa
+      - Don't store or shared machine code
+      - Quicker warm up
+      - lower footprint
+    - Only Java SE Class Library
+  - App CDS
+    - includes application class
+- usage
+  - jaotc
+    - jaotc --outputlibHelloAoT.so HelloAoT.class
+      - --info
+      - --compile-with-assertions
+      - --compile-commands cc.txt
+        - exclude org.sample.code.MyClass.method
+      - module and jar file
+        - Compiling java.base needs about 5GB heap, 20~30 min
+      - VM options
+        - -J-XX:-UsecompressedOops
+    - uses Graal
+      - so different from C1, C2
+      - performance is similar to C1
+      - --compiled-for-tiered
+  - java
+    - -XX:AOTLibrary=./libHelloAoT.so
+    - -XX:+PrintAOT
+  - need same option for java, jaotc, why?
+    - Compressed oops
+    - GC(?)
+      - G1GC needs write barrier in generated code
+      - Parallel is not(?)
 
-## 
+## Building and Testing Java 9 Applications with Gradle [CON2996]
+- Jigsaw
+  - solves
+    - reliable configuration
+    - Strong encapsulation
+  - Problem to build application with jigsaw
+    - sub-package exporting is not supported
+    - 2 module cannot export the same packages
+      - Death to split package
+- Gradle with Jigsaw
+  - it works but there are some bugs
+  - Running on Java9
+  - Gradle runs on JDK8
+    - builds using JDK9
+  - not build-in support for module path
+  - some plugins don't works
+- java-library plugin
+  - devide api and impl
+  - implementation -> requires
+  - api -> requires transitive
+  - runtimeOnly -> requires static
+- Test
+  - we want to split test an src
+- Migrate
+  - add module-info.java
+  - need hack in build.gradle
+  - test
+    - a test module which reads the main module
+    - path module: easier, more compatible, faster
+      - don't know which is best
+    - need a `--add-modules=ALL-MODULE-PATH` to run test for a moment
+      - because gradle is not a module application
+  - Other application
+    - automatic module
+      - module name from filename
+        - or name on `Automatic-Module-Name` in jar's manifest
+        - should reserve module name using `Automatic-Module-Name`
+  - Subproject configuration
+  - Services
+    - uses, provides with
+  - Running the modular application
+    - application plugin with tweaking
+      - --module-path, --module
+- Experimental jigsaw plugin
+  - org.gradle.java.experimenta-jigsaw solves all of tweaking!
+- Multi-release jars
+  - is not good idea ;)
+    - It's not realistic that same dependencies for different target(?)
+  - instead use `src/main/java9` with another source set configuration
+
+##  Amazon Alexa Skills Versus Google Home Actions: The Big Java VUI Face-off [CON3616]
+- 朝会ヘルパーボットをAlexaとHomeで実装して比較するみたいな雑なセッション
+- Google Home
+  - api.ai上でゴニョゴニョする
+  - api.aiだとMoreとかYesとかのリクエストへの対応を自動である程度作ってくれる？
+- Alexa
+  - AmazonのAlexaのページとLambdaで頑張る感じ
+  - コード量多い
+- 連続会話
+  - いずれもContextとかSessionに一旦情報を保存しておく
+    - 誰々の情報教えて
+      - Contextにuser=誰々と保存
+    - もっと詳しく
+      - Contextのuserから情報を取ってきて更に続けるみたいな

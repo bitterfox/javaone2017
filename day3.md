@@ -332,10 +332,110 @@
     - Apache License
   - binary is hosted on Adopt-OpenJDK
     - TODO URL
-
+  - OpenJDK with OpenJ9
+    - OpenJDK is monolishic?
+      - VM has connections into the rest of the JDK
+      - JVMTI
+    - Need patches on build process and class library
+    - Remove HotSpot from OpenJDK and put OpenJ9 on Eclipse OMR
+- Eclipse OMR
+- Under the Hood
+  - What JVM does
+    - load classfile
+      - -verbose:class
+      - How to optimize loading classfile
+        - Optimize data-structure
+          - ClassFile has a method info at mostly end of the file
+            - This is difficult to find main method faster
+          - J9ROMClass
+            - keep all symbolic info from a classfile
+            - remove variability
+            - position independent: map anywhere in the address space
+            - ROM: Read only once written
+            - Classfile -> static verification -> ROM Class builder -> ROMClass
+            - Constant pool is indexable
+          - J9RAMClass
+            - Load superclasses, superinterfaces, Calculate vtable
+            - Cache of J9ROMClass
+              - Optimized method lookup and so on
+          - ShareClasses
+            - Use Shared Classes Cache
+              - This is created by first JVM invocation
+              - Faster invocation and small foot print
+              - 20% improvement of footprint
+    - handle input and output
+    - optimize code
+      - What happen actually running my code
+      - Running on Thread
+        - Thread in VM(J9VMThread) uses omrthread_t in Eclipse OMR
+        - PerThread interpreter state
+          - No base pointer
+          - Only SP A0 PC Method
+      - interpreter
+        - C++, Switch statement / computed goto
+        - Executes
+          - bytecodes
+          - INLs
+          - builds stack frames
+        - Transition to the JIT
+      - JIT Compilcation
+        - interpreter -> cold -> warm -> hot -> profiling -> scorching
+          - intepreter -> warm
+          - hot -> scorching
+        - -Xjit:verbose
+      - Dynamic AOT through ShareClasses
+        - -Xshareclasses
+          - 30%
 
 ## Developer Keynote [KEY7383]
+- Introduction of Oracle Code Events
+- Changes of OTN
+  - Oracle developer community
+    - Videos
+    - Resources to learn what they do
+  - OracleDevs on social media
+  - MOOCs, Code online, DevLive interviews, Developer newslatter, OracleZipLabs
+- Communication is important
+- Slack
+  - Why useful
+    - Human to Human communication
+    - Human to software communication
+  - Introduction of some bots
+  - Dialog -- new feature
+  - Oracle uses Slack
+- Cloud changes developer's life
+  - 12-18 month app dev cycle -> zero-time dev cycle
+  - Monolithic -> Smaller components
+  - -> API first design
+  - New application developement demands
+    - Polyglot
+    - container
+    - DevOps tools
+    - chatbot
+  - Oracle cloud platform
+  - API first design and development
+    - apiary
+      - Documentation first
+      - Documentation is always prototype
+      - apiary <-> github
+      - Markup -> beautiful document -> mock
+      - Detect semantic issues
+- Microservice
+  - Polyglot
+  - Click one button to update to JDK9 from JDK8 on Oracle cloud platform
+- Security
+- Chatbot demo
+- Integration chatbot with Slack
+- Severless to Servicefull
+  - There are alot of useful service
+    - from backend to frontend
+      - But there is a limitation or a possibility of unavailabilities
+  - Promises
+  - Conditions
+
 
 ## JUnit 5 [BOF7382]
+- Absent
 
 ## Modules Are Coming...to Libraries?? [BOF3707]
+- Absent
